@@ -57,7 +57,6 @@ class exports.Map extends Backbone.Model
         xl: 0, xr: @size, yt: 0, yb: @size
 
       for point, pointIndex in points when diagram.cells[pointIndex]
-        seen   = []
         region = _.detect diagram.cells, (cell) ->
           cell.site.x is point.x and cell.site.y is point.y
 
@@ -65,16 +64,10 @@ class exports.Map extends Backbone.Model
         point.y = 0.0
 
         for halfedge in region.halfedges
-          continue if _.any seen, ((vertex) ->
-            vertex[0] is halfedge.edge.va.x and
-            vertex[1] is halfedge.edge.va.y)
-
-          point.x += halfedge.edge.va.x
-          point.y += halfedge.edge.va.y
-
-          seen.push [ halfedge.edge.va.x, halfedge.edge.va.y ]
+          point.x += (halfedge.edge.va.x + halfedge.edge.vb.x) / 2
+          point.y += (halfedge.edge.va.y + halfedge.edge.vb.y) / 2
 
         # use seen rather than halfedges since there may have been
         # duplicate vertices
-        point.x /= seen.length
-        point.y /= seen.length
+        point.x /= region.halfedges.length
+        point.y /= region.halfedges.length

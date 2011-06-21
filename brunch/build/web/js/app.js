@@ -12669,7 +12669,7 @@ Voronoi.prototype.compute = function(sites, bbox) {
       return _results;
     };
     Map.prototype.improveRandomPoints = function(points) {
-      var diagram, halfedge, i, point, pointIndex, region, seen, _results;
+      var diagram, halfedge, i, point, pointIndex, region, _results;
       _results = [];
       for (i = 1; 1 <= NUM_LLOYD_ITERATIONS ? i <= NUM_LLOYD_ITERATIONS : i >= NUM_LLOYD_ITERATIONS; 1 <= NUM_LLOYD_ITERATIONS ? i++ : i--) {
         diagram = new Voronoi().compute(points, {
@@ -12684,7 +12684,6 @@ Voronoi.prototype.compute = function(sites, bbox) {
           for (pointIndex = 0, _len = points.length; pointIndex < _len; pointIndex++) {
             point = points[pointIndex];
             if (diagram.cells[pointIndex]) {
-              seen = [];
               region = _.detect(diagram.cells, function(cell) {
                 return cell.site.x === point.x && cell.site.y === point.y;
               });
@@ -12693,17 +12692,11 @@ Voronoi.prototype.compute = function(sites, bbox) {
               _ref = region.halfedges;
               for (_i = 0, _len2 = _ref.length; _i < _len2; _i++) {
                 halfedge = _ref[_i];
-                if (_.any(seen, (function(vertex) {
-                  return vertex[0] === halfedge.edge.va.x && vertex[1] === halfedge.edge.va.y;
-                }))) {
-                  continue;
-                }
-                point.x += halfedge.edge.va.x;
-                point.y += halfedge.edge.va.y;
-                seen.push([halfedge.edge.va.x, halfedge.edge.va.y]);
+                point.x += (halfedge.edge.va.x + halfedge.edge.vb.x) / 2;
+                point.y += (halfedge.edge.va.y + halfedge.edge.vb.y) / 2;
               }
-              point.x /= seen.length;
-              _results2.push(point.y /= seen.length);
+              point.x /= region.halfedges.length;
+              _results2.push(point.y /= region.halfedges.length);
             }
           }
           return _results2;
