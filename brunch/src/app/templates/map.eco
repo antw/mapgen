@@ -1,0 +1,2 @@
+<canvas height="<%- @size %>" width="<%- @size %>"></canvas>
+<code>000x000</code>

@@ -1,0 +1,20 @@
+html{margin:0;padding:0;border:0}
+body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,code,del,dfn,em,img,q,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,dialog,figure,footer,header,hgroup,nav,section{margin:0;padding:0;border:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline}
+article,aside,dialog,figure,footer,header,hgroup,nav,section{display:block}
+body{line-height:1.5;background:#fff}
+table{border-collapse:separate;border-spacing:0}
+caption,th,td{text-align:left;font-weight:normal;float:none}
+table,th,td{vertical-align:middle}
+blockquote:before,blockquote:after,q:before,q:after{content:""}
+blockquote,q{quotes:"" ""}
+a img{border:none}
+:focus{outline:0}
+body{background:#e1e8ee;padding:50px 0 0 50px}
+#home-view{overflow:visible;padding:5px;width:1250px}
+#crosshair{display:none;position:absolute;top:0;left:0;z-index:10}
+#diff{display:none;position:absolute;top:55px;left:55px;z-index:2}
+.canvas-wrapper{background:#fff;box-shadow:0 1px 5px rgba(0,0,0,0.3);height:600px;float:left;margin-bottom:15px;position:relative;width:600px;}
+.canvas-wrapper#original{margin-right:50px}
+.canvas-wrapper canvas{cursor:crosshair;position:relative;z-index:3}
+.canvas-wrapper code{background:rgba(0,0,0,0.6);border-radius:3px;color:#fff;display:none;font:12px Menlo,monospace;left:0;line-height:1;padding:5px;position:absolute;text-align:right;top:0;z-index:5}
+canvas#map{border:none;vertical-align:top}

@@ -1,0 +1,9 @@
+dependencies:
+  - ConsoleDummy.js
+  - jquery.js
+  - underscore.js
+  - backbone.js
+  - seedrandom.js
+  - rhill-voronoi-core.js
+
+expressPort: 4001
