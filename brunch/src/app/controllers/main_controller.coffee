@@ -39,23 +39,5 @@ class exports.MainController extends Backbone.Controller
     #   console.log "{ x: #{f site.x}, y: #{f site.y} }"#
 
     # Create the map!
-    map = new Map(size, mapData)
-
-    origView = new MapView(map, mapData, size)
-    $('#original').html origView.render().el
-
-    map.go()
-
-    newView = new MapView(map, mapData, size)
-    $('#lloyd').html newView.render().el
-
-    # Draw how the centroids changed.
-    ctx = $('#diff')[0].getContext('2d')
-    ctx.beginPath()
-    ctx.strokeStyle = '#8bdc94'
-
-    for centroid, i in MAP_DATA()
-      ctx.moveTo centroid.x, centroid.y
-      ctx.lineTo mapData[i].x, mapData[i].y
-
-    ctx.stroke()
+    newView = new MapView(new Map(size, mapData), mapData, size)
+    $('#map').html newView.render().el

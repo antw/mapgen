@@ -12564,7 +12564,7 @@ Voronoi.prototype.compute = function(sites, bbox) {
       "home": "home"
     };
     MainController.prototype.home = function() {
-      var centroid, createPoint, ctx, dx, dy, i, map, mapData, newView, origView, size, xmargin, xo, ymargin, yo, _len, _ref;
+      var createPoint, dx, dy, mapData, newView, size, xmargin, xo, ymargin, yo;
       mapData = MAP_DATA();
       $('body').html(app.views.home.render().el);
       size = 600;
@@ -12580,22 +12580,8 @@ Voronoi.prototype.compute = function(sites, bbox) {
           y: Math.round((yo + Math.random() * dy) * 10) / 10
         };
       };
-      map = new Map(size, mapData);
-      origView = new MapView(map, mapData, size);
-      $('#original').html(origView.render().el);
-      map.go();
-      newView = new MapView(map, mapData, size);
-      $('#lloyd').html(newView.render().el);
-      ctx = $('#diff')[0].getContext('2d');
-      ctx.beginPath();
-      ctx.strokeStyle = '#8bdc94';
-      _ref = MAP_DATA();
-      for (i = 0, _len = _ref.length; i < _len; i++) {
-        centroid = _ref[i];
-        ctx.moveTo(centroid.x, centroid.y);
-        ctx.lineTo(mapData[i].x, mapData[i].y);
-      }
-      return ctx.stroke();
+      newView = new MapView(new Map(size, mapData), mapData, size);
+      return $('#map').html(newView.render().el);
     };
     return MainController;
   })();
@@ -12646,6 +12632,7 @@ Voronoi.prototype.compute = function(sites, bbox) {
         yt: 0,
         yb: this.size
       });
+      this.go();
     }
     Map.prototype.go = function() {
       this.improveRandomPoints(this.points);
@@ -13653,7 +13640,7 @@ Voronoi.prototype.compute = function(sites, bbox) {
   }
   (function() {
     (function() {
-      __out.push('<canvas id="crosshair" width="21" height="21"></canvas>\n<canvas id="diff" width="600" height="600"></canvas>\n<div class="canvas-wrapper" id="original"></div>\n<div class="canvas-wrapper" id="lloyd"></div>\n');
+      __out.push('<div class="canvas-wrapper" id="map"></div>\n');
     }).call(this);
     
   }).call(__obj);
@@ -13698,11 +13685,11 @@ Voronoi.prototype.compute = function(sites, bbox) {
   }
   (function() {
     (function() {
-      __out.push('<canvas height="');
+      __out.push('<div class="map">\n  <canvas height="');
       __out.push(this.size);
       __out.push('" width="');
       __out.push(this.size);
-      __out.push('"></canvas>\n<code>000x000</code>\n');
+      __out.push('"></canvas>\n  <code>000x000</code>\n</div>\n');
     }).call(this);
     
   }).call(__obj);
@@ -13721,85 +13708,13 @@ Voronoi.prototype.compute = function(sites, bbox) {
   homeTemplate = require('templates/home');
   exports.HomeView = (function() {
     __extends(HomeView, Backbone.View);
-    HomeView.prototype.id = 'home-view';
-    HomeView.prototype.events = {
-      'mousemove #original canvas': 'moveOriginal',
-      'mousemove #lloyd canvas': 'moveLloyd',
-      'mouseenter #original': 'showCrosshair',
-      'mouseout   #original': 'hideCrosshair',
-      'mouseenter #lloyd': 'showCrosshair',
-      'mouseout   #lloyd': 'hideCrosshair'
-    };
     function HomeView() {
-      HomeView.__super__.constructor.call(this);
-      _.bindAll(this, 'moveOriginal', 'moveLloyd', 'showCrosshair', 'hideCrosshair');
+      HomeView.__super__.constructor.apply(this, arguments);
     }
+    HomeView.prototype.id = 'home-view';
     HomeView.prototype.render = function() {
-      var ctx;
       $(this.el).html(homeTemplate());
-      this.original = this.$('#original');
-      this.lloyd = this.$('#lloyd');
-      this.crosshair = this.$('#crosshair');
-      this.diff = this.$('#diff');
-      ctx = this.crosshair[0].getContext('2d');
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(10.5, 0);
-      ctx.lineTo(10.5, 10);
-      ctx.moveTo(10.5, 11);
-      ctx.lineTo(10.5, 21);
-      ctx.moveTo(0, 10.5);
-      ctx.lineTo(10, 10.5);
-      ctx.moveTo(11, 10.5);
-      ctx.lineTo(21, 10.5);
-      ctx.stroke();
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-      ctx.arc(10.5, 10.5, 5, 0, Math.PI * 2, true);
-      ctx.fill();
-      ctx.stroke();
       return this;
-    };
-    HomeView.prototype.moveCrosshair = function(x, y) {
-      return this.crosshair.css({
-        left: x - 9,
-        top: y - 9
-      });
-    };
-    HomeView.prototype.moveOriginal = function(event) {
-      var lOffset, oOffset, x, y;
-      oOffset = this.original.offset();
-      lOffset = this.lloyd.offset();
-      x = event.pageX - oOffset.left;
-      y = event.pageY - oOffset.top;
-      return this.moveCrosshair(lOffset.left + x, lOffset.top + y);
-    };
-    HomeView.prototype.moveLloyd = function(event) {
-      var lOffset, oOffset, x, y;
-      oOffset = this.original.offset();
-      lOffset = this.lloyd.offset();
-      x = event.pageX - lOffset.left;
-      y = event.pageY - lOffset.top;
-      return this.moveCrosshair(oOffset.left + x, oOffset.top + y);
-    };
-    HomeView.prototype.showCrosshair = function(event) {
-      var offset;
-      this.crosshair.show();
-      this.diff.show();
-      if ($(event.currentTarget).attr('id') === 'original') {
-        offset = this.original.offset();
-      } else {
-        offset = this.lloyd.offset();
-      }
-      return this.diff.show().css({
-        left: offset.left,
-        top: offset.top
-      });
-    };
-    HomeView.prototype.hideCrosshair = function() {
-      this.crosshair.hide();
-      return this.diff.hide();
     };
     return HomeView;
   })();
@@ -13813,21 +13728,20 @@ Voronoi.prototype.compute = function(sites, bbox) {
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  };
   mapTemplate = require('templates/map');
   exports.MapView = (function() {
     __extends(MapView, Backbone.View);
     MapView.prototype.events = {
-      'mouseover canvas': 'showCoordinates',
-      'mouseout  canvas': 'hideCoordinates',
-      'mousemove canvas': 'drawCoordinates'
+      'mouseover  .map': 'showCoordinates',
+      'mouseleave .map': 'hideCoordinates',
+      'mousemove  .map': 'drawCoordinates'
     };
     function MapView(map, sites, size) {
       this.map = map;
       this.sites = sites;
       this.size = size;
       MapView.__super__.constructor.call(this);
-      this.tooltipFade = null;
       _.bindAll(this, 'drawCoordinates', 'showCoordinates', 'hideCoordinates');
     }
     MapView.prototype.drawCoordinates = function(event) {
@@ -13841,17 +13755,11 @@ Voronoi.prototype.compute = function(sites, bbox) {
       });
     };
     MapView.prototype.showCoordinates = function() {
-      if (this.tooltipFade) {
-        return window.clearTimeout(this.tooltipFade);
-      } else {
-        return this.$('code').fadeIn('fast');
-      }
+      return this.$('code').fadeIn('fast');
     };
-    MapView.prototype.hideCoordinates = function() {
-      return this.tooltipFade = window.setTimeout(__bind(function() {
-        this.$('code').fadeOut('fast');
-        return this.tooltipFade = null;
-      }, this), 100);
+    MapView.prototype.hideCoordinates = function(event) {
+      console.log(event.target);
+      return this.$('code').fadeOut('fast');
     };
     MapView.prototype.render = function() {
       var canvas;

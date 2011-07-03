@@ -2,17 +2,15 @@ mapTemplate = require 'templates/map'
 
 class exports.MapView extends Backbone.View
   events:
-    'mouseover canvas': 'showCoordinates'
-    'mouseout  canvas': 'hideCoordinates'
-    'mousemove canvas': 'drawCoordinates'
+    'mouseover  .map': 'showCoordinates'
+    'mouseleave .map': 'hideCoordinates'
+    'mousemove  .map': 'drawCoordinates'
 
   # Creates a new MapView, which presents the Map given as the argument to
   # the constructor.
   #
   constructor: (@map, @sites, @size) ->
     super()
-    @tooltipFade = null
-
     _.bindAll this, 'drawCoordinates', 'showCoordinates', 'hideCoordinates'
 
   drawCoordinates: (event) ->
@@ -21,20 +19,15 @@ class exports.MapView extends Backbone.View
 
     @$('code').text "#{x}x#{y}"
     @$('code').css
-      left:   x + 10
-      top:    y + 10
+      left: x + 10
+      top:  y + 10
 
   showCoordinates: ->
-    if @tooltipFade
-      window.clearTimeout @tooltipFade
-    else
-      @$('code').fadeIn 'fast'
+    @$('code').fadeIn 'fast'
 
-  hideCoordinates: ->
-    @tooltipFade = window.setTimeout =>
-      @$('code').fadeOut 'fast'
-      @tooltipFade = null
-    , 100
+  hideCoordinates: (event) ->
+    console.log(event.target)
+    @$('code').fadeOut 'fast'
 
   # Renders the map by drawing the voronoi diagram in the map model.
   #

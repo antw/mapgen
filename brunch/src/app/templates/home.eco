@@ -1,4 +1,1 @@
-<canvas id="crosshair" width="21" height="21"></canvas>
-<canvas id="diff" width="600" height="600"></canvas>
-<div class="canvas-wrapper" id="original"></div>
-<div class="canvas-wrapper" id="lloyd"></div>
+<div class="canvas-wrapper" id="map"></div>

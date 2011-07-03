@@ -13,6 +13,8 @@ class exports.Map extends Backbone.Model
     @voronoi = new Voronoi()
     @diagram = @voronoi.compute(points, xl: 0, xr: @size, yt: 0, yb: @size)
 
+    @go()
+
   # Builds the map.
   #
   go: ->
