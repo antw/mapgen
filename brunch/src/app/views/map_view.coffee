@@ -1,17 +1,17 @@
 mapTemplate = require 'templates/map'
 
 class exports.MapView extends Backbone.View
+  className: 'map'
+
   events:
-    'mouseover  .map': 'showCoordinates'
-    'mouseleave .map': 'hideCoordinates'
-    'mousemove  .map': 'drawCoordinates'
+    'mouseover':  'showCoordinates'
+    'mouseleave': 'hideCoordinates'
+    'mousemove':  'drawCoordinates'
 
   # Creates a new MapView, which presents the Map given as the argument to
   # the constructor.
   #
   constructor: (@map, @sites, @size) ->
-    super()
-    _.bindAll this, 'drawCoordinates', 'showCoordinates', 'hideCoordinates'
 
   drawCoordinates: (event) ->
     x = event.pageX - @$('canvas').offset().left

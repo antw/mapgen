@@ -13685,11 +13685,11 @@ Voronoi.prototype.compute = function(sites, bbox) {
   }
   (function() {
     (function() {
-      __out.push('<div class="map">\n  <canvas height="');
+      __out.push('<canvas height="');
       __out.push(this.size);
       __out.push('" width="');
       __out.push(this.size);
-      __out.push('"></canvas>\n  <code>000x000</code>\n</div>\n');
+      __out.push('"></canvas>\n<code>000x000</code>\n');
     }).call(this);
     
   }).call(__obj);
@@ -13732,17 +13732,16 @@ Voronoi.prototype.compute = function(sites, bbox) {
   mapTemplate = require('templates/map');
   exports.MapView = (function() {
     __extends(MapView, Backbone.View);
+    MapView.prototype.className = 'map';
     MapView.prototype.events = {
-      'mouseover  .map': 'showCoordinates',
-      'mouseleave .map': 'hideCoordinates',
-      'mousemove  .map': 'drawCoordinates'
+      'mouseover': 'showCoordinates',
+      'mouseleave': 'hideCoordinates',
+      'mousemove': 'drawCoordinates'
     };
     function MapView(map, sites, size) {
       this.map = map;
       this.sites = sites;
       this.size = size;
-      MapView.__super__.constructor.call(this);
-      _.bindAll(this, 'drawCoordinates', 'showCoordinates', 'hideCoordinates');
     }
     MapView.prototype.drawCoordinates = function(event) {
       var x, y;

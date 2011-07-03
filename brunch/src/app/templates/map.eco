@@ -1,4 +1,2 @@
-<div class="map">
-  <canvas height="<%- @size %>" width="<%- @size %>"></canvas>
-  <code>000x000</code>
-</div>
+<canvas height="<%- @size %>" width="<%- @size %>"></canvas>
+<code>000x000</code>
